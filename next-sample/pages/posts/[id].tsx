@@ -1,9 +1,10 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { ParsedUrlQuery } from "querystring";
 
 type PostProps = {
-  id: string | undefined // getStaticPropsでエラー出るからundefined追加
+  id: string //| undefined getStaticPropsでエラー出るからundefined追加
 }
 
 const Post: NextPage<PostProps> = (props) => {
@@ -50,18 +51,24 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {paths, fallback: false};
 }
 
-export const getStaticProps: GetStaticProps<PostProps> = async (context) => {
+// P124 正誤表より
+interface PostParams extends ParsedUrlQuery {
+  id: string
+}
+
+export const getStaticProps: GetStaticProps<PostProps, PostParams> = async (context) => {
   // TODO: context.paramsがundefinedの場合の書き方。let使わずできないか
-  let id;
-  if (context.params?.id) {
-    id = Array.isArray(context.params['id'])
-    ? context.params['id'][0]
-    : context.params['id'];
-  }
+  // let id;
+  // if (context.params?.id) {
+  //   id = Array.isArray(context.params['id'])
+  //   ? context.params['id'][0]
+  //   : context.params['id'];
+  // }
   
+  // Not-null Assertion Operatorでnon-undefined示す
   return {
     props: {
-      id,
+      id: context.params!['id'],
     },
   }
 }
