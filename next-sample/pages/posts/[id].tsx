@@ -60,15 +60,15 @@ export const getStaticProps: GetStaticProps<PostProps, PostParams> = async (cont
   // TODO: context.paramsがundefinedの場合の書き方。let使わずできないか
   // let id;
   // if (context.params?.id) {
-  //   id = Array.isArray(context.params['id'])
-  //   ? context.params['id'][0]
-  //   : context.params['id'];
+    const id = Array.isArray(context.params!['id'])
+    ? context.params!['id'][0]
+    : context.params!['id'];
   // }
   
   // Not-null Assertion Operatorでnon-undefined示す
   return {
     props: {
-      id: context.params!['id'],
+      id,
     },
   }
 }
